@@ -1,2 +1,2 @@
 # markr
-R package for marking sheets 
+R package for electronic marking with moodle

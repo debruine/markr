@@ -1,0 +1,75 @@
+---
+title: "Assessment `r assign_id` Report"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+header-includes:
+  - \usepackage[table]{xcolor}
+  - \definecolor{stripe}{RGB}{237,250,255}
+  - \renewcommand{\familydefault}{\sfdefault}
+  - \renewcommand{\baselinestretch}{1.2} 
+  - \setlength\extrarowheight{2pt}
+---
+
+```{r, echo = FALSE}
+library(tidyverse)
+```
+
+
+## `r sum(!is.na(fb$mark))` of `r length(unique(fb$id))` assessments marked
+
+```{r evaltable, echo = FALSE, results='asis'}
+
+if (exists("eval") & "eval" %in% show) {
+  cat("\\section{Evaluation categories}\n")
+  eval %>%
+    pander::pandoc.table(
+      split.cells = c(8, 65),
+      justify = c("left", "left")
+    )
+}
+```
+
+
+```{r check_second_mark, echo = FALSE, message=FALSE, results='asis'}
+if ("mark2" %in% show) {
+  cat("\\section{Second marking}\n\n")
+  
+  smark_table <- check_second_marking(marking)
+  
+  too_diff <- smark_table %>%
+      mutate(too_diff = abs(discrepency) > 2) %>%
+      group_by() %>%
+      summarise(m = mean(too_diff) * 100) %>%
+      pull(m) %>%
+      round()
+  
+  cat(too_diff, "% are more than 2 fine marks apart.\n\n")
+  
+  smark_table %>%
+    pander::pandoc.table(justify = c("left", "right", "right", "right"))
+}
+```
+
+
+```{r mark_dist, echo = FALSE, results = 'asis'}
+if ("mark_dist" %in% show) {
+  cat("\\section{Mark distribution}\n")
+  mark_dist(marking)
+}
+```
+
+
+```{r cat_dist, echo = FALSE, results = 'asis'}
+if ("cat_dist" %in% show) {
+  cat("\\section{Category distribution}\n")
+  cat_dist(marking)
+}
+```
+
+
+```{r cat_mark, echo = FALSE, results = 'asis'}
+if ("cat_mark" %in% show) {
+  cat("\\section{Category vs Mark correspondance}\n")
+  cat_mark(marking)
+}
+```

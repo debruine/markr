@@ -1,0 +1,44 @@
+---
+title: "ATEP Assignment 1"
+subtitle: "Comparing Original and Media Reports"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+header-includes:
+  - \usepackage[table]{xcolor}
+  - \definecolor{stripe}{RGB}{237,250,255}
+  - \renewcommand{\familydefault}{\sfdefault}
+  - \renewcommand{\baselinestretch}{1.2} 
+  - \setlength\extrarowheight{2pt}
+---
+
+### Student ID: `r as.character(ind_fb$id)`
+
+Feedback provided by `r ind_fb$marker`
+
+*Note on feedback*: You should find it helpful to consider the comments made here when it comes to writing the reports for the next assessment, in terms of the strengths of your skills and areas that could be further developed.  In order to obtain the most out of this feedback, you should read through your coursework again.
+
+The aim of this assignment is to develop your comprehension and critical analysis of both primary (original research) and secondary (media reports)  literature in the field of evolutionary psychology.
+
+## Preliminary mark: `r ind_fb$mark`
+
+
+```{r category-table, echo = FALSE, results='asis'}
+
+cats <- c("Doing really well", 
+          "Going well, but build your skills", 
+          "You need to do more work here")
+
+category_table(ind_fb, marking$eval, cats)
+  
+```
+
+
+## What you could focus on in future work
+
+### What to keep doing
+
+`r ind_fb$strengths`
+
+### Key things to address
+
+`r ind_fb$weaknesses`

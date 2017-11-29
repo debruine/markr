@@ -1,0 +1,7 @@
+q,Category
+media,Did you accurately and succinctly summarise the media article?
+res,Did you accurately and succinctly summarise the original research?
+cor,Did you critically evaluate the correspondance between the media article and original research?
+eval,"Did you include appropriate and insightful evaluation of theory, methods, analysis and/or communication?"
+cite,"Did you support your points with appropriate citations, links, or logical arguments?"
+com,Are your ideas clearly communicated?
