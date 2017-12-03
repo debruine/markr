@@ -25,5 +25,6 @@ cat_mark <- function(marking) {
     ggplot2::ggplot(ggplot2::aes(mark, mean_score, size = n, color = n)) +
     ggplot2::geom_point() +
     ggplot2::scale_x_continuous(breaks=0:22) +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() +
+    ggplot2::facet_grid(question~.)
 }

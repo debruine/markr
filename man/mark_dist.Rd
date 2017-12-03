@@ -4,10 +4,12 @@
 \alias{mark_dist}
 \title{Marking Distribution Graph}
 \usage{
-mark_dist(marking)
+mark_dist(marking, show_by_question = FALSE)
 }
 \arguments{
 \item{marking}{list containing a dataframe (marks)}
+
+\item{show_by_question}{facet graphs by question (default FALSE)}
 }
 \value{
 ggplot

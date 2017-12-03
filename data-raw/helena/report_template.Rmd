@@ -1,0 +1,74 @@
+---
+title: "Assessment `r assign_id` Report"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+header-includes:
+  - \usepackage[table]{xcolor}
+  - \definecolor{stripe}{RGB}{237,250,255}
+  - \renewcommand{\familydefault}{\sfdefault}
+  - \renewcommand{\baselinestretch}{1.2} 
+  - \setlength\extrarowheight{2pt}
+---
+
+```{r, echo = FALSE}
+library(tidyverse)
+```
+
+
+## `r sum(!is.na(fb$mark))` of `r length(unique(fb$id))` assessments marked
+
+```{r evaltable, echo = FALSE, results='asis'}
+
+if (!is.na(marking$eval) & "eval" %in% show) {
+  cat("\\section{Evaluation categories}\n")
+  marking$eval %>%
+    pander::pandoc.table(
+      split.cells = c(8, 65),
+      justify = c("left", "left")
+    )
+}
+```
+
+
+```{r check_second_mark, echo = FALSE, message=FALSE, results='asis'}
+if ("mark2" %in% show) {
+  cat("\\section{Second marking}\n\n")
+  
+  suppressMessages(
+    smark_table <- check_second_marking(marking, report = TRUE)
+  )
+}
+```
+
+
+```{r mark_dist, echo = FALSE, results = 'asis'}
+if ("mark_dist" %in% show) {
+  cat("\\section{Overall mark distribution}\n")
+  mark_dist(marking)
+}
+```
+
+
+```{r mark_dist_by_q, echo = FALSE, results = 'asis'}
+if ("mark_dist" %in% show & 
+    n_distinct(marking$marks$question) > 1) {
+  cat("\\section{Mark distribution by question}\n")
+  mark_dist(marking, TRUE)
+}
+```
+
+
+```{r cat_dist, echo = FALSE, results = 'asis'}
+if (!is.na(marking$eval) & "cat_dist" %in% show) {
+  cat("\\section{Overall category distribution}\n")
+  cat_dist(marking)
+}
+```
+
+
+```{r cat_mark, echo = FALSE, results = 'asis'}
+if (!is.na(marking$eval) & "cat_mark" %in% show) {
+  cat("\\section{Category vs Mark correspondance}\n")
+  cat_mark(marking)
+}
+```

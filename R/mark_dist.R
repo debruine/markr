@@ -3,14 +3,15 @@
 #' \code{mark_dist} create a graph of the marking distribution
 #'
 #' @param marking list containing a dataframe (marks)
+#' @param show_by_question facet graphs by question (default FALSE)
 #' 
 #' @return ggplot
 #' @examples
 #' mark_dist(marking_example)
 #' @export
 
-mark_dist <- function(marking) {
-  marking$marks %>%
+mark_dist <- function(marking, show_by_question = FALSE) {
+  md <- marking$marks %>%
     dplyr::filter(!is.na(mark)) %>%
     ggplot2::ggplot() +
     ggplot2::geom_histogram(
@@ -27,5 +28,11 @@ mark_dist <- function(marking) {
       breaks=seq(0,22,2), 
       limits = c(-0.5, 22.5)
     ) +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() 
+  
+  if (show_by_question) {
+    md + ggplot2::facet_grid(question~.)
+  } else {
+    md
+  }
 }

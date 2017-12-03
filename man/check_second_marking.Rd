@@ -4,15 +4,17 @@
 \alias{check_second_marking}
 \title{Create Second Marking Table}
 \usage{
-check_second_marking(marking, filename = NA)
+check_second_marking(marking, filename = "second_marking", report = FALSE)
 }
 \arguments{
 \item{marking}{list containing a dataframe (marks) and moodle participant directory (dir)}
 
-\item{filename}{path of second marking file}
+\item{filename}{path to second marking file or directory}
+
+\item{report}{render output for a LaTeX report (default FALSE)}
 }
 \value{
-none
+tibble (or latex for a report)
 }
 \description{
 \code{check_second_marking} returns a table with first and second marks

@@ -4,17 +4,17 @@
 \alias{load_marks}
 \title{Load Marking Data}
 \usage{
-load_marks(markfile = "marks.csv", dir = "submissions", evalfile = NA,
+load_marks(markfile = "marks.csv", dir = NA, evalfile = NA,
   assign_id = NA, id_col = 1, encoding = "latin1")
 }
 \arguments{
-\item{markfile}{path to marking file}
+\item{markfile}{path to marking file or directory of marking files}
 
-\item{dir}{path to moodle submission directory}
+\item{dir}{path to moodle submission directory (optional)}
 
 \item{evalfile}{path to evaluation criteria file (optional)}
 
-\item{assign_id}{Moodle assignment ID (set to last numbers of markfile if missing)}
+\item{assign_id}{Moodle assignment ID}
 
 \item{id_col}{column where the participant id number is found (can be named or numeric) (defaults to 1)}
 

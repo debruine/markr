@@ -2,10 +2,10 @@
 #'
 #' \code{load_marks} loads marking data 
 #'
-#' @param markfile path to marking file
-#' @param dir path to moodle submission directory
+#' @param markfile path to marking file or directory of marking files
+#' @param dir path to moodle submission directory (optional)
 #' @param evalfile path to evaluation criteria file (optional)
-#' @param assign_id Moodle assignment ID (set to last numbers of markfile if missing)
+#' @param assign_id Moodle assignment ID
 #' @param id_col column where the participant id number is found (can be named or numeric) (defaults to 1)
 #' @param encoding encoding for importing .csv files (defaults to latin1)
 #' 
@@ -15,13 +15,18 @@
 #' @export
 
 load_marks <- function(markfile = "marks.csv", 
-                      dir = "submissions",
+                      dir = NA,
                       evalfile = NA,
                       assign_id = NA,
                       id_col = 1,
                       encoding = "latin1") {
-  stopifnot(dir.exists(dir))
   stopifnot(file.exists(markfile))
+  
+  if (!is.na(dir)) {
+    if (!dir.exists(dir)) {
+      warning(paste("The moodle submission directory", dir, "does not exist"))
+    }
+  }
   
   marking <- list(
     marks = NA,
@@ -29,18 +34,48 @@ load_marks <- function(markfile = "marks.csv",
     eval = NA
   )
   
-  if (stringr::str_sub(markfile, -4) == ".csv") {
-    # encoding needed because of stupid •ÈÀIdentifier in moodle
-    m <- readr::read_csv(
-      markfile, 
-      local = readr::locale(encoding = encoding)
-    )
-  } else if (stringr::str_sub(markfile, -4) == ".xls") {
-    m <- readxl::read_xls(markfile)
-  } else if (stringr::str_sub(markfile, -5) == ".xlsx") {
-    m <- readxl::read_xlsx(markfile)
+  if (dir.exists(markfile)) {
+    # markfile is a directory, get all files in it
+    markfiles <- list.files(markfile, pattern = "\\.(xls|xlsx|csv|txt)$")
+    m <- tibble::tibble()
+    for (f in markfiles) {
+      message(paste("Loading", f))
+      
+      suppressMessages(
+        if (grepl("\\.xls(x)?$", f)) {
+          subm <- readxl::read_excel(paste0(markfile, "/", f))
+        } else if (grepl("\\.csv$", f)) {
+          subm <- readr::read_csv(paste0(markfile, "/", f))
+        } else if (grepl("\\.txt$", f)) {
+          subm <- readr::read_tsv(paste0(markfile, "/", f))
+        }
+      )
+      
+      subm <- subm %>%
+        dplyr::mutate(file = gsub("\\.(xls|xlsx|csv|txt)$", "", f)) %>%
+        tidyr::separate(file, c("year", "class_id", "assignment", "question", "marker"))
+      
+      if (nrow(m) == 0) {
+        m <- subm
+      } else {
+        m <- dplyr::bind_rows(m, subm)
+      }
+    }
   } else {
-    stop(paste(markfile, "needs to be a CSV or Excel file"))
+    #markfile is a file
+    if (stringr::str_sub(markfile, -4) == ".csv") {
+      # encoding needed because of stupid •ÈÀIdentifier in moodle
+      m <- readr::read_csv(
+        markfile, 
+        local = readr::locale(encoding = encoding)
+      )
+    } else if (stringr::str_sub(markfile, -4) == ".xls") {
+      m <- readxl::read_xls(markfile)
+    } else if (stringr::str_sub(markfile, -5) == ".xlsx") {
+      m <- readxl::read_xlsx(markfile)
+    } else {
+      stop(paste(markfile, "needs to be a CSV or Excel file"))
+    }
   }
   
   if (is.na(assign_id)) {
@@ -53,15 +88,14 @@ load_marks <- function(markfile = "marks.csv",
   }
   
   # extracts participant ID from the ID column (default is "Participant 12345678")
-  #pid <- purrr::map(m[id_col], stringr::str_extract_all, "[[:digit:]]+", simplify = TRUE)
+  pid <- purrr::map(m[id_col], stringr::str_extract_all, "[[:digit:]]+", simplify = TRUE)
   
   marking$marks <- m %>%
     dplyr::mutate(
       mark = convert_grades(Grade),
-      assign_id = assign_id
-    ) %>%
-    tidyr::separate(id_col, c("p", "id"), remove = FALSE, convert = TRUE) %>%
-    dplyr::select(-p)
+      assign_id = assign_id,
+      id = as.integer(unlist(pid))
+    )
 
   if (!is.na(evalfile)) {
     if (!file.exists(evalfile)) {

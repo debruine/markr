@@ -20,17 +20,14 @@ make_feedback <- function(marking,
                           quiet = TRUE) {
   stopifnot(file.exists(template))
   
-  fb <- marking$marks
-  
   # set feedback directory or create it if none exists
   fb_dir <- if (is.na(marking$dir)) "feedback" else marking$dir
   if (!dir.exists(fb_dir)) {
     dir.create(fb_dir, recursive = TRUE)
   }
   
-  for (myid in unique(fb$id)){
-    ind_fb <- fb %>%
-      dplyr::filter(id == myid)
+  for (myid in unique(marking$marks$id)){
+    # ind_fb <- fb %>% dplyr::filter(id == myid)
     
     # get list on each recursion in case new dirs are made
     all_dirs <- list.dirs(fb_dir) 

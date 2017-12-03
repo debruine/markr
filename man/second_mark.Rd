@@ -5,7 +5,7 @@
 \title{Generate Second Marking List}
 \usage{
 second_mark(marking, dir = "second_marking", remove_file = "feedback.pdf",
-  pass_min = 9)
+  pass_min = 9, show_first_mark = FALSE)
 }
 \arguments{
 \item{marking}{list containing a dataframe (marks) and moodle participant directory (dir)}
@@ -15,6 +15,8 @@ second_mark(marking, dir = "second_marking", remove_file = "feedback.pdf",
 \item{remove_file}{filename to remove from second marking directory}
 
 \item{pass_min}{minimum passing mark; all lower marks are second marked (default 9)}
+
+\item{show_first_mark}{include first mark in second marking files (default FALSE)}
 }
 \value{
 none

@@ -1,0 +1,88 @@
+---
+title: "`r class_name`"
+subtitle: "`r assignment_name`"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+header-includes:
+  - \usepackage[table]{xcolor}
+  - \definecolor{stripe}{RGB}{237,250,255}
+  - \renewcommand{\familydefault}{\sfdefault}
+  - \renewcommand{\baselinestretch}{1.2} 
+  - \setlength\extrarowheight{2pt}
+---
+
+```{r, echo = FALSE}
+ind_fb <- filter(marking$marks, id == myid)
+
+avg_mark <- round(mean(marking$marks$mark, na.rm = TRUE))
+```
+
+
+### Student ID: `r as.character(myid)`
+
+Feedback provided by `r ind_fb$marker`
+
+Please find below some brief notes on your Paper 1 exam in the recent exam period.  Overall your performance on this exam was a `r ind_fb$mark` and the class average was a `r avg_mark`.
+
+## Social Section
+
+You answered question 13. Evaluate the relative importance of automatic and controlled processes in interpersonal interaction.  For this you a grade B1 which is a very good performance.  Xx students answered this question and on average attained a B2 grade.  In terms of the Social section of the exam on average students achieved a B2 grade [add here whatever other stats we want]
+
+To fully answer this question students needed to define automatic and controlled or conscious processes and the circumstances under which they might apply. One suitable model would be the cognitive miser vs naïve scientist resolved as the motivated tactician. This left open the topic under which evidence could be build and suitable topics included first impressions and inference; attitudes; friendship/attraction; aggression.
+
+Very good (B) answers might have not balanced discussion on automatic and controlled processes  well and/or might not have used evidence extensively, but still compared and the two. In comparison Excellent (A) answers compared the automatic and controlled well and highlighted when they might be applied, using evidence from a relevant topic to support ideas.  Good (C) answers did not supply evidence to support ideas or may not have defined automatic and controlled processes well. To pass it was necessary to at least mention the two ways of thinking and attempt to discuss how they relate to interpersonal interaction.
+
+### In terms of how the different criteria were assessed: 
+
+In this essay students could show their knowledge by clearly defining automatic and controlled processes and also by applying them to a suitable topic, so showing further knowledge about social psychology more generally. 
+
+In terms of Evaluation and Comprehension, in this essay students could show their skills by describing relevant research as evidence for points and interpreting the evidence in the context of the essay question.  Most importantly this criteria was evidenced by an understanding of how different theories in social Psychology interact to explain social behaviours. 
+
+In this essay students could show their communication skills by structuring their short essay so that it introduced the question and arguments, provided evidence to support arguments and then to conclude by summarising briefly the main points in their essay.
+To improve further you could focus more on Evaluation and Comprehension.  In the appendix to this feedback there is advice on how  you can make improvements in Evaluation and Comprehension.
+
+
+## Developmental Section:
+
+You answered question 4. Jim is a psychologist who wants to know if gender influences friendship patterns across childhood and adolescence. He has come to you asking for advice on the best method to research this question and what ethical issues he should consider. What advice would you give to Jim?  For this you a grade B1 which is a very good performance.  Xx students answered this question and on average attained a B2 grade.  In terms of the Developmental Section of the exam on average students achieved a B2 grade [add here whatever other stats we want].
+
+In this answer I was looking for discussion of the different types of methods that might be suitable for this kind of question including what the advantages and disadvantages of each and some demonstration of the key ethical issues around these issues specifically related to the focus of the question on friendships.
+
+Really good answers to this question compared and contrasted different methods and very specifically applied these to the area of focus so why one of the methods reviewed might be best for a longitudinal study on friendship. The very best answers gave really thoughtful consideration to the specific ethical issues potentially associated with this topic, well done!
+
+Less strong answers approached the question very generically and ignored the context provided and didn’t apply the methods discussed to the topic. For example would practice issues necessarily be an issue for longitudinal studies on this particular topic? They also talked about ethics at a very general level and could have thought a little more about the specific case and the issues that might arise from it.
+
+### In terms of how the different criteria were assessed: 
+
+In this essay students could show their knowledge by clearly defining automatic and controlled processes and also by applying them to a suitable topic, so showing further knowledge about social psychology more generally. 
+
+In terms of Evaluation and Comprehension, in this essay students could show their skills by describing relevant research as evidence for points and interpreting the evidence in the context of the essay question.  Most importantly this criteria was evidenced by an understanding of how different theories in social Psychology interact to explain social behaviours. 
+
+In this essay students could show their communication skills by structuring their short essay so that it introduced the question and arguments, provided evidence to support arguments and then to conclude by summarising briefly the main points in their essay.
+To improve further you could focus more on Knowledge.  In the appendix to this feedback there is advice on how  you can make improvements in Knowledge.
+
+
+## Individual Differences Section
+
+You answered question xx. Evaluate the relative importance of automatic and controlled processes in interpersonal interaction.  For this you a grade B1 which is a very good performance.  Xx students answered this question and on average attained a B2 grade.  In terms of the Social section of the exam on average students achieved a B2 grade [add here whatever other stats we want]
+
+To fully answer this question students needed to define automatic and controlled or conscious processes and the circumstances under which they might apply. One suitable model would be the cognitive miser vs naïve scientist resolved as the motivated tactician. This left open the topic under which evidence could be build and suitable topics included first impressions and inference; attitudes; friendship/attraction; aggression.
+
+Very good (B) answers might have not balanced discussion on automatic and controlled processes  well and/or might not have used evidence extensively, but still compared and the two. In comparison Excellent (A) answers compared the automatic and controlled well and highlighted when they might be applied, using evidence from a relevant topic to support ideas.  Good (C) answers did not supply evidence to support ideas or may not have defined automatic and controlled processes well. To pass it was necessary to at least mention the two ways of thinking and attempt to discuss how they relate to interpersonal interaction.
+
+### In terms of how the different criteria were assessed: 
+
+In this essay students could show their knowledge by clearly defining automatic and controlled processes and also by applying them to a suitable topic, so showing further knowledge about social psychology more generally. 
+
+In terms of Evaluation and Comprehension, in this essay students could show their skills by describing relevant research as evidence for points and interpreting the evidence in the context of the essay question.  Most importantly this criteria was evidenced by an understanding of how different theories in social Psychology interact to explain social behaviours. 
+
+In this essay students could show their communication skills by structuring their short essay so that it introduced the question and arguments, provided evidence to support arguments and then to conclude by summarising briefly the main points in their essay.
+To improve further you could focus more on Comprehension.  In the appendix to this feedback there is advice on how you can make improvements in Comprehension.
+
+All the best,
+
+Dr Phil McAleer
+
+
+
+
