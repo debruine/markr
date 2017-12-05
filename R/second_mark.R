@@ -27,7 +27,7 @@ second_mark <- function(marking,
   if ("question" %in% names(marking$marks)) {
     questions <- unique(marking$marks$question) %>% sort()
   } else {
-    marking$marks <- mutate(marking$marks, question = "Q1")
+    marking$marks <- dplyr::mutate(marking$marks, question = "Q1")
     questions <- "Q1"
   }
   

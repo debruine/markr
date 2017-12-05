@@ -17,6 +17,36 @@ devtools::install("markr")
 ## run this to generate a report and individual feedback
 library("markr")
 
+# remember to set your working directory!
+setwd("~/markr/data-raw/example")
+
+m2 <- load_marks(
+  markfile = "787420_marking.csv",
+  dir = "submissions",
+  evalfile = "787420_eval.csv",
+  assign_id = "787420"
+)
+
+# generate second marking list
+second_mark(m2)
+
+# make a report 
+make_report(m2) 
+
+# create feedback sheets and save in fb_dir
+make_feedback(
+  m2, 
+  template = "787420_template.Rmd",
+  filename = "feedback.pdf"
+)
+
+
+
+
+
+
+# multiple-question exam demo
+
 setwd("~/markr/data-raw/helena")
 m <- load_marks("marking1", assign_id = "ATEP")
 #View(m$marks)
@@ -42,23 +72,3 @@ make_feedback(
 
 
 
-# remember to set your working directory!
-setwd("~/markr/data-raw/example")
-marking_example <- load_marks(
-  "787420_marking.csv",
-  "submissions",
-  "787420_eval.csv",
-  "ATEP 1"
-)
-
-# generate second marking list
-second_mark(m)
-
-# make a report 
-make_report(m) 
-
-# create feedback sheets and save in fb_dir
-make_feedback(m, 
-  template = "787420_template.Rmd",
-  filename = "feedback.pdf"
-)

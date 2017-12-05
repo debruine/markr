@@ -16,7 +16,7 @@ cat_mark <- function(marking) {
     dplyr::filter(!is.na(mark)) %>%
     tidyr::gather("Category", "cat_label", cats) %>%
     dplyr::mutate(score = mean(cat_label) - cat_label) %>%
-    dplyr::group_by(id, mark) %>%
+    dplyr::group_by(id, mark, question) %>%
     dplyr::summarise(mean_score = mean(score)) 
   
   check_scores %>%

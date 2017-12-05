@@ -11,7 +11,12 @@ header-includes:
   - \setlength\extrarowheight{2pt}
 ---
 
-### Student ID: `r as.character(ind_fb$id)`
+```{r, echo = FALSE}
+ind_fb <- filter(marking$marks, id == myid)
+```
+
+
+### Student ID: `r as.character(myid)`
 
 Feedback provided by `r ind_fb$marker`
 

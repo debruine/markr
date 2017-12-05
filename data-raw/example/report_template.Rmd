@@ -46,7 +46,7 @@ if ("mark2" %in% show) {
   cat(too_diff, "% are more than 2 fine marks apart.\n\n")
   
   smark_table %>%
-    pander::pandoc.table(justify = c("left", "right", "right", "right"))
+    pander::pandoc.table(justify = c("left", "left", "right", "right", "right"))
 }
 ```
 
