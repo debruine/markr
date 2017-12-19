@@ -1,5 +1,5 @@
 ---
-title: "Assessment `r assign_id` Report"
+title: "`r assign_id` Report"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 header-includes:

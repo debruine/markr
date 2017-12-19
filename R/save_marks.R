@@ -15,5 +15,7 @@ save_marks <- function(marking, filename = NA) {
     filename <- paste0(marking$marks$assign_id[1], "_all_marks.csv")
   }
   
-  readr::write_excel_csv(marking$marks, filename)
+  readr::write_csv(marking$marks, filename)
+  
+  message(paste("Saved as", filename))
 }

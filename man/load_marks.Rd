@@ -5,7 +5,7 @@
 \title{Load Marking Data}
 \usage{
 load_marks(markfile = "marks.csv", dir = NA, evalfile = NA,
-  assign_id = NA, id_col = 1, encoding = "latin1")
+  assign_id = NA, id_col = 1, moodlefile = NA, encoding = "latin1")
 }
 \arguments{
 \item{markfile}{path to marking file or directory of marking files}
@@ -17,6 +17,8 @@ load_marks(markfile = "marks.csv", dir = NA, evalfile = NA,
 \item{assign_id}{Moodle assignment ID}
 
 \item{id_col}{column where the participant id number is found (can be named or numeric) (defaults to 1)}
+
+\item{moodlefile}{path to file of student_id and moodle_id matches}
 
 \item{encoding}{encoding for importing .csv files (defaults to latin1)}
 }

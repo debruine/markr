@@ -6,7 +6,7 @@
 #' @param filename path to second marking file or directory
 #' @param report render output for a LaTeX report (default FALSE)
 #' 
-#' @return tibble (or latex for a report)
+#' @return list (or latex for a report)
 #' @examples
 #' check_second_marking(marking_example)
 #' @export
@@ -29,7 +29,7 @@ check_second_marking <- function(marking, filename = "second_marking", report = 
         }
       )
       
-      subm$id = as.integer(subm$id)
+      subm$moodle_id = as.integer(subm$moodle_id)
       
       if (nrow(second_marks) == 0) {
         second_marks <- subm
@@ -39,17 +39,26 @@ check_second_marking <- function(marking, filename = "second_marking", report = 
     }
   }
   
-  all_na <- dplyr::pull(second_marks, mark2) %>% is.na() %>% mean()
-  if (all_na == 1) return("No second marks have been given")
+  all_na <- dplyr::pull(second_marks, grade2) %>% is.na() %>% mean()
+  if (all_na == 1) {
+    warning("No second marks have been given")
+    return(marking)
+  }
   
-  smark_table <- second_marks %>%
-    dplyr::left_join(marking$marks, by = c("id", "question")) %>%
-    dplyr::select(id, question, mark, mark2) %>%
-    dplyr::mutate(discrepency = (mark2 - mark)) %>%
-    dplyr::arrange(question, dplyr::desc(abs(discrepency)), discrepency)
+  second_marks <- second_marks %>%
+    dplyr::select(moodle_id, question, grade2)
+
+  smark_table <- marking$marks %>%
+    dplyr::select(-dplyr::matches("grade2")) %>%
+    dplyr::left_join(second_marks, by = c("moodle_id", "question")) %>%
+    dplyr::mutate(mark2 = convert_grades(grade2, to = "numbers")) %>%
+    dplyr::mutate(discrepency = (mark2 - mark1))
   
   if (report) {
     st <- smark_table %>%
+      dplyr::filter(!is.na(mark2)) %>%
+      dplyr::select(moodle_id, question, agreed = Grade, mark1, mark2, discrepency) %>%
+      dplyr::arrange(question, dplyr::desc(abs(discrepency)), discrepency) %>%
       dplyr::mutate(q = question) %>%
       dplyr::group_by(q) %>%
       dplyr::mutate() %>%
@@ -61,11 +70,13 @@ check_second_marking <- function(marking, filename = "second_marking", report = 
         cat("\\subsection{", data$question[1], "}\n")
         cat(too_diff, "% more than 2 fine marks apart\n", sep = "")
         pander::pandoc.table(data, 
-                             justify = c("left", "left", "right", "right", "right")
+                             justify = c("left", "left", "right", "right", "right", "right")
         )
       }))
   } else {
-    smark_table
+    marking$marks <- smark_table
+    
+    marking
   }
   
 }

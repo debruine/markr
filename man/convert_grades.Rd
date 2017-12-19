@@ -4,10 +4,12 @@
 \alias{convert_grades}
 \title{Convert Grades to Marks}
 \usage{
-convert_grades(grades, scale = glasgow22())
+convert_grades(grades, to = NA, scale = glasgow22())
 }
 \arguments{
 \item{grades}{vector of letter or number grades}
+
+\item{to}{convert to `letters` or `numbers` (default NA converts to other type)}
 
 \item{scale}{conversion table containing `letters` and `numbers`}
 }

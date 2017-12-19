@@ -1,6 +1,5 @@
 ---
-title: "`r class_name`"
-subtitle: "`r assignment_name`"
+title: "L2 Exam Feedback"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 header-includes:
@@ -11,22 +10,62 @@ header-includes:
   - \setlength\extrarowheight{2pt}
 ---
 
-```{r, echo = FALSE}
-ind_fb <- filter(marking$marks, id == myid)
+```{r, echo = FALSE, message=FALSE}
+library(tidyverse)
+```
 
-avg_mark <- round(mean(marking$marks$mark, na.rm = TRUE))
+```{r, echo = FALSE}
+ind_fb <- filter(marking$marks, moodle_id == myid)
+
+student_id <- ind_fb$ID[1]
+
+ind_overall_mark <- ind_fb$mark %>%
+  mean() %>%
+  round() %>%
+  convert_grades(to = "letters")
+
+avg_mark <- marking$marks$mark %>%
+  mean(na.rm = TRUE) %>%
+  round() %>%
+  convert_grades(to = "letters")
+
 ```
 
 
-### Student ID: `r as.character(myid)`
+### Student ID: `r student_id`
 
-Feedback provided by `r ind_fb$marker`
-
-Please find below some brief notes on your Paper 1 exam in the recent exam period.  Overall your performance on this exam was a `r ind_fb$mark` and the class average was a `r avg_mark`.
+Please find below some brief notes on your Paper 1 exam in the recent exam period.  Overall your performance on this exam was a `r ind_overall_mark` and the class average was a `r avg_mark`.
 
 ## Social Section
 
-You answered question 13. Evaluate the relative importance of automatic and controlled processes in interpersonal interaction.  For this you a grade B1 which is a very good performance.  Xx students answered this question and on average attained a B2 grade.  In terms of the Social section of the exam on average students achieved a B2 grade [add here whatever other stats we want]
+```{r social, echo = FALSE}
+# get all social questions and calculate feedback stats
+social_all <- filter(ind_fb, question %in% c("Q12", "Q14"))
+social_mean_grade <- social_all$mark %>%
+  mean() %>%
+  round() %>%
+  convert_grades(to= "letters")
+```
+
+Feedback provided by `r filter(social_all, moodle_id == myid)$marker`
+
+```{r Q12, echo = FALSE, results='asis'}
+Q <- "Q12"
+
+if (Q %in% ind_fb$question) {
+  social_Q <- filter(ind_fb, question == Q)
+  my_grade <- social_Q %>% pull(Grade) %>% toupper()
+  thisQ <- filter(marking$marks, question == Q)
+  mean_grade <- thisQ$mark%>%
+    mean() %>%
+    round() %>%
+    convert_grades(to= "letters")
+  
+  cat("
+
+You answered question ", Q, ": Evaluate the relative importance of automatic and controlled processes in interpersonal interaction.  
+
+For this you had a grade of ", my_grade, ", which is a very good performance. ", nrow(thisQ), " students answered this question and on average attained a ", mean_grade, " grade.  In terms of the Social section of the exam on average students achieved a ", social_mean_grade , " grade.
 
 To fully answer this question students needed to define automatic and controlled or conscious processes and the circumstances under which they might apply. One suitable model would be the cognitive miser vs naïve scientist resolved as the motivated tactician. This left open the topic under which evidence could be build and suitable topics included first impressions and inference; attitudes; friendship/attraction; aggression.
 
@@ -41,10 +80,82 @@ In terms of Evaluation and Comprehension, in this essay students could show thei
 In this essay students could show their communication skills by structuring their short essay so that it introduced the question and arguments, provided evidence to support arguments and then to conclude by summarising briefly the main points in their essay.
 To improve further you could focus more on Evaluation and Comprehension.  In the appendix to this feedback there is advice on how  you can make improvements in Evaluation and Comprehension.
 
+  ")
+}
+
+```
+
+```{r Q14, echo = FALSE, results='asis'}
+Q <- "Q14"
+
+if (Q %in% ind_fb$question) {
+  social_Q <- filter(ind_fb, question == Q)
+  my_grade <- social_Q %>% pull(Grade) %>% toupper()
+  thisQ <- filter(marking$marks, question == Q)
+  mean_grade <- thisQ$mark %>%
+    mean() %>%
+    round() %>%
+    convert_grades(to = "letters")
+  
+  cat("
+
+You answered question ", Q, ": Evaluate the relative importance of automatic and controlled processes in interpersonal interaction.  
+
+For this you had a grade of ", my_grade, ", which is a very good performance. ", nrow(thisQ), " students answered this question and on average attained a ", mean_grade, " grade.  In terms of the Social section of the exam on average students achieved a ", social_mean_grade , " grade.
+
+To fully answer this question students needed to define automatic and controlled or conscious processes and the circumstances under which they might apply. One suitable model would be the cognitive miser vs naïve scientist resolved as the motivated tactician. This left open the topic under which evidence could be build and suitable topics included first impressions and inference; attitudes; friendship/attraction; aggression.
+
+Very good (B) answers might have not balanced discussion on automatic and controlled processes  well and/or might not have used evidence extensively, but still compared and the two. In comparison Excellent (A) answers compared the automatic and controlled well and highlighted when they might be applied, using evidence from a relevant topic to support ideas.  Good (C) answers did not supply evidence to support ideas or may not have defined automatic and controlled processes well. To pass it was necessary to at least mention the two ways of thinking and attempt to discuss how they relate to interpersonal interaction.
+
+  ")
+}
+
+```
+  
+### Your Main Area for Improvement
+  
+```{r, echo = FALSE, results='asis'}
+  if (social_Q$FeedForward == "Knowledge") {
+    cat("Knowledge: Blah blah blah.")
+  } else if (social_Q$FeedForward == "Communication") {
+    cat("Communication: Blah blah blah.")
+  } else if (social_Q$FeedForward == "Evaluation_Comprehension") {
+    cat("Evaluation/Comprehension: Blah blah blah.")
+  }
+  
+```
+
+
 
 ## Developmental Section:
 
-You answered question 4. Jim is a psychologist who wants to know if gender influences friendship patterns across childhood and adolescence. He has come to you asking for advice on the best method to research this question and what ethical issues he should consider. What advice would you give to Jim?  For this you a grade B1 which is a very good performance.  Xx students answered this question and on average attained a B2 grade.  In terms of the Developmental Section of the exam on average students achieved a B2 grade [add here whatever other stats we want].
+```{r dev, echo = FALSE}
+# get all social questions and calculate feedback stats
+dev_all <- filter(ind_fb, question %in% c("Q13", "Q15"))
+dev_mean_grade <- dev_all$mark %>%
+    mean() %>%
+    round() %>%
+    convert_grades(to = "letters")
+```
+
+Feedback provided by `r filter(dev_all, moodle_id == myid)$marker`
+
+```{r Q13, echo = FALSE, results='asis'}
+Q <- "Q13"
+
+if (Q %in% ind_fb$question) {
+  dev_Q <- filter(ind_fb, question == Q)
+  my_grade <- dev_Q %>% pull(Grade) %>% toupper()
+  thisQ <- filter(marking$marks, question == Q)
+  mean_grade <- thisQ$mark %>%
+    mean() %>%
+    round() %>%
+    convert_grades(to = "letters")
+  
+  cat("
+You answered question", Q, ": Jim is a psychologist who wants to know if gender influences friendship patterns across childhood and adolescence. He has come to you asking for advice on the best method to research this question and what ethical issues he should consider. What advice would you give to Jim?  
+
+For this you had a grade of ", my_grade, ", which is a very good performance. ", nrow(thisQ), " students answered this question and on average attained a ", mean_grade, " grade.  In terms of the Developmental section of the exam on average students achieved a ", dev_mean_grade , " grade.
 
 In this answer I was looking for discussion of the different types of methods that might be suitable for this kind of question including what the advantages and disadvantages of each and some demonstration of the key ethical issues around these issues specifically related to the focus of the question on friendships.
 
@@ -61,6 +172,48 @@ In terms of Evaluation and Comprehension, in this essay students could show thei
 In this essay students could show their communication skills by structuring their short essay so that it introduced the question and arguments, provided evidence to support arguments and then to conclude by summarising briefly the main points in their essay.
 To improve further you could focus more on Knowledge.  In the appendix to this feedback there is advice on how  you can make improvements in Knowledge.
 
+  ")
+}
+
+```
+
+```{r Q15, echo = FALSE, results='asis'}
+Q <- "Q15"
+
+if (Q %in% ind_fb$question) {
+  dev_Q <- filter(ind_fb, question == Q)
+  my_grade <- dev_Q %>% pull(Grade) %>% toupper()
+  thisQ <- filter(marking$marks, question == Q)
+  mean_grade <- thisQ$mark %>%
+    mean() %>%
+    round() %>%
+    convert_grades(to = "letters")
+  
+  cat("
+You answered question", Q, ": Jim is a psychologist who wants to know if gender influences friendship patterns across childhood and adolescence. He has come to you asking for advice on the best method to research this question and what ethical issues he should consider. What advice would you give to Jim?  
+
+For this you had a grade of ", my_grade, ", which is a very good performance. ", nrow(thisQ), " students answered this question and on average attained a ", mean_grade, " grade.  In terms of the Developmental section of the exam on average students achieved a ", dev_mean_grade , " grade.
+
+In this answer I was looking for...
+
+  ")
+}
+
+```
+
+
+### Your Main Area for Improvement
+  
+```{r, echo = FALSE, results='asis'}
+  if (dev_Q$FeedForward == "Knowledge") {
+    cat("Knowledge: Blah blah blah.")
+  } else if (dev_Q$FeedForward == "Communication") {
+    cat("Communication: Blah blah blah.")
+  } else if (dev_Q$FeedForward == "Evaluation_Comprehension") {
+    cat("Evaluation/Comprehension: Blah blah blah.")
+  }
+  
+```
 
 ## Individual Differences Section
 

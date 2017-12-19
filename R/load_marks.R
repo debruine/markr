@@ -7,6 +7,7 @@
 #' @param evalfile path to evaluation criteria file (optional)
 #' @param assign_id Moodle assignment ID
 #' @param id_col column where the participant id number is found (can be named or numeric) (defaults to 1)
+#' @param moodlefile path to file of student_id and moodle_id matches
 #' @param encoding encoding for importing .csv files (defaults to latin1)
 #' 
 #' @return list
@@ -19,6 +20,7 @@ load_marks <- function(markfile = "marks.csv",
                       evalfile = NA,
                       assign_id = NA,
                       id_col = 1,
+                      moodlefile = NA,
                       encoding = "latin1") {
   stopifnot(file.exists(markfile))
   
@@ -53,7 +55,15 @@ load_marks <- function(markfile = "marks.csv",
       
       subm <- subm %>%
         dplyr::mutate(file = gsub("\\.(xls|xlsx|csv|txt)$", "", f)) %>%
-        tidyr::separate(file, c("year", "class_id", "assignment", "question", "marker"))
+        tidyr::separate(
+          file, 
+          into = c("year", "class_id", "assignment", "question", "marker"),
+          sep = "_",
+          convert = TRUE,
+          extra = "merge",
+          fill = "right"
+        ) %>%
+        dplyr::mutate(marker = gsub("-", " ", marker))
       
       if (nrow(m) == 0) {
         m <- subm
@@ -61,6 +71,12 @@ load_marks <- function(markfile = "marks.csv",
         m <- dplyr::bind_rows(m, subm)
       }
     }
+    
+    if (is.na(assign_id)) {
+      # use year_classid_assignment if not specified
+      assign_id <- paste(m$year[1], m$class_id[1], m$assignment[1], sep = "_")
+    }
+    
   } else {
     #markfile is a file
     if (stringr::str_sub(markfile, -4) == ".csv") {
@@ -76,27 +92,64 @@ load_marks <- function(markfile = "marks.csv",
     } else {
       stop(paste(markfile, "needs to be a CSV or Excel file"))
     }
-  }
-  
-  if (is.na(assign_id)) {
-    # get last number in filename if assign_id is not set manually
-    #fn <- stringr::str_extract_all(markfile, "[[:digit:]]+", simplify = TRUE)
-    #assign_id <- fn[length(fn)]
     
-    # give the markfile name if not specified
-    assign_id <- gsub("\\.(csv|xls|xlsx)$", "", markfile)
+    if (is.na(assign_id)) {
+      # give the markfile name if not specified
+      assign_id <- gsub("\\.(csv|xls|xlsx)$", "", markfile)
+    }
   }
   
   # extracts participant ID from the ID column (default is "Participant 12345678")
-  pid <- purrr::map(m[id_col], stringr::str_extract_all, "[[:digit:]]+", simplify = TRUE)
+  pid <- purrr::map(
+    m[id_col], 
+    stringr::str_extract_all, 
+    "[[:digit:]]+", 
+    simplify = TRUE
+  ) %>%
+    unlist() %>%
+    as.integer()
   
+  # load or create moodle ID matching file
+  if (!is.na(moodlefile)) {
+    if (file.exists(moodlefile)) {
+      suppressMessages(
+        if (grepl("\\.xls(x)?$", moodlefile)) {
+          moodle_match <- readxl::read_excel(moodlefile)
+        } else if (grepl("\\.csv$", moodlefile)) {
+          moodle_match <- readr::read_csv(moodlefile)
+        } else if (grepl("\\.txt$", moodlefile)) {
+          moodle_match <- readr::read_tsv(moodlefile)
+        }
+      )
+      
+      moodle_match <- moodle_match %>%
+        dplyr::mutate(
+          student_id = as.integer(student_id),
+          moodle_id = as.integer(moodle_id)
+        )
+    } else {
+      warning(paste(moodlefile, "does not exist"))
+    }
+  } else {
+    moodle_match <- tibble::tibble(
+      student_id = pid,
+      moodle_id = pid
+    ) %>%
+      unique()
+  }
+
   marking$marks <- m %>%
     dplyr::mutate(
-      mark = convert_grades(Grade),
       assign_id = assign_id,
-      id = as.integer(unlist(pid))
-    )
-
+      mark = convert_grades(Grade, to = "numbers"),
+      grade1 = convert_grades(Grade, to = "letters"),
+      mark1 = mark,
+      student_id = pid
+    ) %>%
+    dplyr::left_join(moodle_match, by = "student_id") %>%
+    dplyr::select(-student_id)
+  
+  # load eval file
   if (!is.na(evalfile)) {
     if (!file.exists(evalfile)) {
       stop(paste(evalfile, "does not exist"))

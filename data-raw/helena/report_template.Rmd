@@ -1,7 +1,9 @@
 ---
 title: "Assessment `r assign_id` Report"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: pdf_document
+output: 
+  pdf_document:
+    latex_engine: xelatex
 header-includes:
   - \usepackage[table]{xcolor}
   - \definecolor{stripe}{RGB}{237,250,255}
@@ -10,12 +12,11 @@ header-includes:
   - \setlength\extrarowheight{2pt}
 ---
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, message=FALSE}
 library(tidyverse)
 ```
 
-
-## `r sum(!is.na(fb$mark))` of `r length(unique(fb$id))` assessments marked
+## `r sum(!is.na(fb$mark))` of `r length(fb$moodle_id)` assessments marked from `r length(unique(fb$moodle_id))` students for `r length(unique(fb$question))` questions
 
 ```{r evaltable, echo = FALSE, results='asis'}
 

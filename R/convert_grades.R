@@ -3,6 +3,7 @@
 #'\code{convert_grades} convert letter grades to numeric marks
 #'
 #'@param grades vector of letter or number grades
+#'@param to convert to `letters` or `numbers` (default NA converts to other type)
 #'@param scale conversion table containing `letters` and `numbers`
 #'
 #'@return vector
@@ -10,18 +11,39 @@
 #'convert_grades(marking_example$marks$Grade)
 #'@export
 
-convert_grades <- function(grades, scale = glasgow22()) {
+convert_grades <- function(grades, to = NA, scale = glasgow22()) {
   stopifnot(length(grades) > 0)
   stopifnot("numbers" %in% colnames(scale))
   stopifnot("letters" %in% colnames(scale))
   
+  # add blanks and NAs to scale
+  scale <- scale %>%
+    dplyr::add_row(letters = "", numbers = "") %>%
+    dplyr::add_row(letters = NA, numbers = NA)
+  
+  present_grades <- grades[grades!="" & !is.na(grades)]
+  
   if (mean(grades %in% scale$numbers) == 1) {
-    scale$letters[match(grades, scale$numbers)]
-  } else if (mean(grades %in% scale$letters) == 1) {
-    scale$numbers[match(grades, scale$letters)]
+    if (to == "numbers") {
+      # leave as is
+      converted <- grades
+    } else {
+    # convert to letters
+      converted <- scale$letters[match(grades, scale$numbers)]
+    }
+  } else if (mean(toupper(grades) %in% toupper(scale$letters)) == 1) {
+    if (to == "letters") {
+      # leave as is (uppercase)
+      converted <- toupper(grades)
+    } else {
+      # convert to numbers
+      converted <- as.integer( scale$numbers[match(toupper(grades), toupper(scale$letters))] )
+    }
   } else {
     stop("Some grades are not in the scale")
   }
+  
+  converted
 }
 
 #'Glasgow 22-Point Marking Scale

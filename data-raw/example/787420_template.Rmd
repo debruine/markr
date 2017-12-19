@@ -12,7 +12,7 @@ header-includes:
 ---
 
 ```{r, echo = FALSE}
-ind_fb <- filter(marking$marks, id == myid)
+ind_fb <- dplyr::filter(marking$marks, id == myid)
 ```
 
 
@@ -47,3 +47,34 @@ category_table(ind_fb, marking$eval, cats)
 ### Key things to address
 
 `r ind_fb$weaknesses`
+
+### Generic Feedback
+
+```{r Q1, echo = FALSE, results='asis'}
+if (ind_fb$question == "Q1") {
+  cat("
+
+## Question text: The question can be written this way.
+
+* Bullet point 1
+* Bullet Point 2
+
+Some answered this question by looking at the influence of both genes and environment but forgot to address the element of their ‘dynamic interaction’ and to consider the implications for provision of this interaction – really important that you read the question very carefully and address all aspects in your answer.  Also remember the importance of balancing breadth and depth, some answers (possibly an attempt to demonstrate your reading) had a tendency to give long lists of studies.  Knowing the information is one thing – more important is to use that information effectively. Strong answers to this question showed extensive engagement in the literature but also used this knowledge effectively in constructing clear arguments in response to the question posed. 
+
+Feed forward advice:
+
+1. Make sure you answer the question asked!
+2. Take time to structure answers.
+3. Don’t just list/describe studies – discuss them
+
+")
+}
+```
+
+```{r Q2, echo = FALSE, results='asis'}
+if (ind_fb$question == "Q2") {
+  cat("Question for Q2\n\n")
+  
+  cat("Generic feedback for Q2")
+}
+```

@@ -14,7 +14,7 @@ check_second_marking(marking, filename = "second_marking", report = FALSE)
 \item{report}{render output for a LaTeX report (default FALSE)}
 }
 \value{
-tibble (or latex for a report)
+list (or latex for a report)
 }
 \description{
 \code{check_second_marking} returns a table with first and second marks

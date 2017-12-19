@@ -26,12 +26,11 @@ make_feedback <- function(marking,
     dir.create(fb_dir, recursive = TRUE)
   }
   
-  for (myid in unique(marking$marks$id)){
-    # ind_fb <- fb %>% dplyr::filter(id == myid)
-    
+  for (myid in unique(marking$marks$moodle_id)){
     # get list on each recursion in case new dirs are made
     all_dirs <- list.dirs(fb_dir) 
     pdir_n <- grep(myid, all_dirs)
+    
     if (length(pdir_n) == 1) {
       # save in a dir that contains the id
       pdir <- all_dirs[pdir_n]

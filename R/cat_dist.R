@@ -11,6 +11,8 @@
 #' @export
 
 cat_dist <- function(marking, rating_levels = 1:3) {
+  if (!is.data.frame(marking$eval)) return("Categories are not defined.")
+  
   cats <- dplyr::pull(marking$eval, q)
   
   marking$marks %>%

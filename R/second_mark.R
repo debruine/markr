@@ -20,7 +20,6 @@ second_mark <- function(marking,
                         pass_min = 9, # minimum mark to pass (9 UG, 12 PG)
                         show_first_mark = FALSE
 ) {
-  marking$marks
   assign_id <- marking$marks$assign_id[1]
   
   # get distinct questions
@@ -44,12 +43,12 @@ second_mark <- function(marking,
     second_n <- max(10, ceiling(nrow(fb)/10))
     if (nrow(fb) <= second_n) {
       message(paste("Selecting all", nrow(fb), q, "to second mark"))
-      to_second_mark <- dplyr::pull(fb, id)
+      to_second_mark <- dplyr::pull(fb, moodle_id)
     } else {
       # select all fails
       fails <- fb %>%
         dplyr::filter(mark < pass_min) %>%
-        dplyr::pull(id)
+        dplyr::pull(moodle_id)
       
       # get ~1/3 low, mid and high marks
       low_high_n <- floor((second_n - length(fails))/3)
@@ -57,28 +56,37 @@ second_mark <- function(marking,
       
       f <- fb %>%
         dplyr::filter(mark >= pass_min) %>%
-        dplyr::arrange(mark, id) %>%
-        dplyr::mutate(
-          n = 1:nrow(.),
-          band = ifelse(n <= nrow(.)/3, "low", "med"),
-          band = ifelse(n > 2*nrow(.)/3, "high", band)
-          # quantiles don't work well if there is a very uneven distribution of marks
-          #band = ifelse(mark < stats::quantile(mark, 0.67), "med", "high"),
-          #band = ifelse(mark < stats::quantile(mark, 0.33), "low", band)
-        )
+        dplyr::arrange(mark, moodle_id)
       
-      lows <- f %>% 
-        dplyr::filter(band == "low") %>%
-        dplyr::pull(id) %>% 
-        base::sample(low_high_n)
-      mids <- f %>% 
-        dplyr::filter(band == "med") %>%
-        dplyr::pull(id) %>% 
-        base::sample(mid_n)
-      highs <- f %>% 
-        dplyr::filter(band == "high") %>%
-        dplyr::pull(id) %>% 
-        base::sample(low_high_n)
+      if (nrow(f) > 0) {
+        f <- f %>% 
+          dplyr::mutate(
+            n = 1:nrow(.),
+            band = ifelse(n <= nrow(.)/3, "low", "med"),
+            band = ifelse(n > 2*nrow(.)/3, "high", band)
+            # quantiles don't work well if there is a very uneven distribution of marks
+            #band = ifelse(mark < stats::quantile(mark, 0.67), "med", "high"),
+            #band = ifelse(mark < stats::quantile(mark, 0.33), "low", band)
+          )
+      
+        lows <- f %>% 
+          dplyr::filter(band == "low") %>%
+          dplyr::pull(moodle_id) %>% 
+          base::sample(low_high_n)
+        mids <- f %>% 
+          dplyr::filter(band == "med") %>%
+          dplyr::pull(moodle_id) %>% 
+          base::sample(mid_n)
+        highs <- f %>% 
+          dplyr::filter(band == "high") %>%
+          dplyr::pull(moodle_id) %>% 
+          base::sample(low_high_n)
+      } else {
+        message("No one passed")
+        lows <- c()
+        mids <- c()
+        highs <- c()
+      }
       
       to_second_mark <- c(fails, lows, mids, highs)
     }
@@ -88,22 +96,25 @@ second_mark <- function(marking,
     dir.create(qdir, showWarnings = FALSE, recursive = TRUE)
     
     second_marks <- tibble::tibble(
-      id = to_second_mark,
+      moodle_id = to_second_mark,
       question = q,
-      mark2 = 0
+      grade2 = ""
     ) %>%
-      dplyr::arrange(id) %>%
-      dplyr::left_join(fb, by = c("id", "question")) %>% 
-      dplyr::select(id, question, mark1 = mark, mark2)
+      dplyr::arrange(moodle_id) %>%
+      dplyr::left_join(fb, by = c("moodle_id", "question")) %>% 
+      dplyr::select(ID, moodle_id, question, mark1 = mark, grade1 = Grade, grade2)
       
     message(paste(q, "marks = (", toString(sort(second_marks$mark1)), ")"))
     
     if (!show_first_mark) {
-      second_marks <- dplyr::select(second_marks, -mark1)
+      second_marks <- dplyr::select(second_marks, -mark1, -grade1)
     }
     
     # create marking file
-    readr::write_csv(second_marks, paste0(dir, "/", assign_id, "_", q, "_second_marking.csv"))
+    readr::write_csv(
+      second_marks, 
+      paste0(dir, "/", assign_id, "_", q, "_second_marking.csv")
+    )
     
     # copy folders to 2nd marking folder
     if (is.na(marking$dir)) {
@@ -113,16 +124,16 @@ second_mark <- function(marking,
                   "doesn't exist, so no files were copied into the second marking folder"))
     } else {
       all_dirs <- list.dirs(marking$dir) 
-      for (id in to_second_mark) {
-        pdir_n <- grep(id, all_dirs)
+      for (moodle_id in to_second_mark) {
+        pdir_n <- grep(moodle_id, all_dirs)
         if (length(pdir_n) == 1) {
           # get the dir that contains the id
           pdir <- all_dirs[pdir_n]
         } else if (length(pdir_n) == 0) {
-          message(paste("No directory found for", id))
+          message(paste("No directory found for", moodle_id))
           pdir <- c()
         } else if (length(pdir_n) > 1) {
-          message(paste(length(pdir_n), "directories copied for", id))
+          message(paste(length(pdir_n), "directories copied for", moodle_id))
           pdir <- all_dirs[pdir_n]
         }
         file.copy(from = pdir, to = qdir,
