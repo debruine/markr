@@ -51,14 +51,14 @@ second_mark <- function(marking,
         dplyr::pull(moodle_id)
       
       # get ~1/3 low, mid and high marks
-      low_high_n <- floor((second_n - length(fails))/3)
-      mid_n <- second_n - length(fails) - 2*low_high_n
+      low_high_n <- max(0, floor((second_n - length(fails))/3))
+      mid_n <- max(0, second_n - length(fails) - 2*low_high_n)
       
       f <- fb %>%
         dplyr::filter(mark >= pass_min) %>%
         dplyr::arrange(mark, moodle_id)
       
-      if (nrow(f) > 0) {
+      if (nrow(f) > 0 & low_high_n > 0 & mid_n > 0) {
         f <- f %>% 
           dplyr::mutate(
             n = 1:nrow(.),
