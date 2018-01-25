@@ -57,7 +57,7 @@ load_marks <- function(markfile = "marks.csv",
         dplyr::mutate(file = gsub("\\.(xls|xlsx|csv|txt)$", "", f)) %>%
         tidyr::separate(
           file, 
-          into = c("year", "class_id", "assignment", "question", "marker"),
+          into = c("year", "class_id", "question", "marker"),
           sep = "_",
           convert = TRUE,
           extra = "merge",
@@ -73,8 +73,8 @@ load_marks <- function(markfile = "marks.csv",
     }
     
     if (is.na(assign_id)) {
-      # use year_classid_assignment if not specified
-      assign_id <- paste(m$year[1], m$class_id[1], m$assignment[1], sep = "_")
+      # use year_classid if not specified
+      assign_id <- paste(m$year[1], m$class_id[1], sep = "_")
     }
     
   } else {
