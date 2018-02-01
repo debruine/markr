@@ -3,7 +3,7 @@ setwd("~/markr")
 #devtools::use_data(marking_example, overwrite = TRUE)
 devtools::document()
 devtools::load_all()
-#devtools::check()
+devtools::check()
 
 
 # to build the package for installation
