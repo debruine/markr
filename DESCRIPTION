@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: person("Lisa", "DeBruine", email = "debruine@gmail.com", role = c("aut", "cre"))
 Description: Provides functions for electronic marking with moodle.
 Depends:
-    R (>= 3.4.2)
+    R (>= 3.4.1)
 Imports:
     tidyr (>= 0.7.2),
     dplyr (>= 0.7.4),
