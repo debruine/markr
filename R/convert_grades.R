@@ -57,10 +57,10 @@ convert_grades <- function(grades, to = NA, scale = glasgow22()) {
 
 glasgow22 <- function() {
   tibble::tibble(
-    letters =c("H", "G2", "G1", "F3", "F2", "F1", 
+    letters =c("CR", "CW", "MV", "H", "G2", "G1", "F3", "F2", "F1", 
             "E3", "E2", "E1", "D3", "D2", "D1", 
             "C3", "C2", "C1", "B3", "B2", "B1", 
             "A5", "A4", "A3", "A2", "A1"), 
-    numbers = 0:22
+    numbers = c(NA, NA, NA, 0:22)
   )
 }

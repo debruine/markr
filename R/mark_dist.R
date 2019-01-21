@@ -11,7 +11,16 @@
 #' @export
 
 mark_dist <- function(marking, by = FALSE) {
-  md <- marking$marks %>%
+  if (is.list(marking)) {
+    mark_table <- marking$marks
+  } else if (is.data.frame(marking)) {
+    mark_table <- marking
+  } else {
+    stop("The first argument must be a dataframe 
+         or list with the data in `marks`.")
+  }
+  
+  md <- mark_table %>%
     dplyr::filter(!is.na(mark)) %>%
     ggplot2::ggplot() +
     ggplot2::geom_histogram(
@@ -38,3 +47,4 @@ mark_dist <- function(marking, by = FALSE) {
     md
   }
 }
+  

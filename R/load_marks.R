@@ -43,27 +43,40 @@ load_marks <- function(markfile = "marks.csv",
     for (f in markfiles) {
       message(paste("Loading", f))
       
+      filepath <- paste0(markfile, "/", f)
+      
       suppressMessages(
         if (grepl("\\.xls(x)?$", f)) {
-          subm <- readxl::read_excel(paste0(markfile, "/", f))
+          subm <- readxl::read_excel(filepath)
         } else if (grepl("\\.csv$", f)) {
-          subm <- readr::read_csv(paste0(markfile, "/", f))
+          subm <- readr::read_csv(filepath,
+                                  col_types = cols("Student ID" = col_character())
+                                  )
         } else if (grepl("\\.txt$", f)) {
-          subm <- readr::read_tsv(paste0(markfile, "/", f))
+          subm <- readr::read_tsv(filepath)
         }
       )
       
       subm <- subm %>%
         dplyr::mutate(file = gsub("\\.(xls|xlsx|csv|txt)$", "", f)) %>%
         tidyr::separate(
-          file, 
-          into = c("year", "class_id", "question", "marker"),
+          file, # e.g., PSYCH4006 Human Development_Exam_ind_feedback_2018-2019
+          into = c("class_id"),
+          sep = " ",
+          convert = TRUE,
+          extra = "drop",
+          remove = FALSE
+        ) %>%
+        tidyr::separate(
+          file, # e.g., PSYCH4006 Human Development_Exam_ind_feedback_2018-2019
+          into = c("assign_id", "junk1", "junk2", "junk3", "year"),
           sep = "_",
           convert = TRUE,
           extra = "merge",
           fill = "right"
         ) %>%
-        dplyr::mutate(marker = gsub("-", " ", marker))
+        select(-junk1, -junk2, -junk3) %>%
+        dplyr::mutate(marker = gsub("-", " ", Marker))
       
       if (nrow(m) == 0) {
         m <- subm
@@ -80,7 +93,7 @@ load_marks <- function(markfile = "marks.csv",
   } else {
     #markfile is a file
     if (stringr::str_sub(markfile, -4) == ".csv") {
-      # encoding needed because of stupid •ÈÀIdentifier in moodle
+      # encoding needed because of stupid identifier in moodle
       m <- readr::read_csv(
         markfile, 
         local = readr::locale(encoding = encoding)
@@ -166,5 +179,3 @@ load_marks <- function(markfile = "marks.csv",
   
   marking
 }
-
-                      

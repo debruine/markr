@@ -4,8 +4,9 @@
 \alias{second_mark}
 \title{Generate Second Marking List}
 \usage{
-second_mark(marking, dir = "second_marking", remove_file = "feedback.pdf",
-  pass_min = 9, show_first_mark = FALSE)
+second_mark(marking, dir = "second_marking",
+  remove_file = "feedback.pdf", pass_min = 9,
+  show_first_mark = FALSE)
 }
 \arguments{
 \item{marking}{list containing a dataframe (marks) and moodle participant directory (dir)}

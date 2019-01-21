@@ -1,0 +1,31 @@
+ID,Grade,FeedForward,year,class_id,assignment,question,marker,assign_id,mark,grade1,mark1,moodle_id,grade2,mark2,discrepency,updated_grade,comment
+1234567,A5,Comprehension_Evaluation,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,18,A5,18,23,A5,18,0,NA,NA
+7654321,D2,Academic_Communication,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,10,B2,16,24,B2,16,0,D2,Changed mind
+2345678,A5,Knowledge_Research,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,18,A5,18,25,A5,18,0,NA,NA
+3456789,C1,Comprehension_Evaluation,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,14,C1,14,26,NA,NA,NA,NA,NA
+4567890,A3,Academic_Communication,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,20,A3,20,27,NA,NA,NA,NA,NA
+9877572,B2,Knowledge_Research,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,16,B2,16,28,B3,15,-1,NA,NA
+6662738,B3,Comprehension_Evaluation,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,15,B3,15,29,NA,NA,NA,NA,NA
+2738488,B2,Academic_Communication,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,16,B2,16,30,B3,15,-1,NA,NA
+2277364,B2,Knowledge_Research,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,16,B2,16,31,A2,21,5,NA,NA
+1115552,B3,Comprehension_Evaluation,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,15,B3,15,32,b3,15,0,NA,NA
+1125244,A2,Academic_Communication,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,21,A2,21,33,a2,21,0,NA,NA
+2847468,B1,Knowledge_Research,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,17,B1,17,34,B1,17,0,NA,NA
+2238475,B1,Comprehension_Evaluation,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,17,B1,17,35,B1,17,0,NA,NA
+2226354,B1,Academic_Communication,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,17,B1,17,36,NA,NA,NA,NA,NA
+1228228,B2,Knowledge_Research,2017,2010,paper1,Q12,Lisa,2017_2010_paper1,16,B2,16,37,NA,NA,NA,NA,NA
+1234567,D1,Academic_Communication,2017,2010,paper1,Q13,Helena,2017_2010_paper1,11,A5,18,23,A5,18,0,D1,First marker made a mistake
+7654321,C1,Knowledge_Research,2017,2010,paper1,Q13,Helena,2017_2010_paper1,14,C1,14,24,C1,14,0,NA,NA
+2345678,A3,Comprehension_Evaluation,2017,2010,paper1,Q13,Helena,2017_2010_paper1,20,A3,20,25,B2,16,-4,NA,NA
+3456789,B2,Academic_Communication,2017,2010,paper1,Q13,Helena,2017_2010_paper1,16,B2,16,26,NA,NA,NA,NA,NA
+4567890,B3,Knowledge_Research,2017,2010,paper1,Q13,Helena,2017_2010_paper1,15,B3,15,27,NA,NA,NA,NA,NA
+9877572,B2,Comprehension_Evaluation,2017,2010,paper1,Q13,Helena,2017_2010_paper1,16,B2,16,28,B3,15,-1,NA,NA
+6662738,B2,Academic_Communication,2017,2010,paper1,Q13,Helena,2017_2010_paper1,16,B2,16,29,b2,16,0,NA,NA
+2738488,B3,Knowledge_Research,2017,2010,paper1,Q13,Helena,2017_2010_paper1,15,B3,15,30,b3,15,0,NA,NA
+2277364,A2,Comprehension_Evaluation,2017,2010,paper1,Q13,Helena,2017_2010_paper1,21,A2,21,31,NA,NA,NA,NA,NA
+1115552,A1,Academic_Communication,2017,2010,paper1,Q13,Helena,2017_2010_paper1,22,A1,22,32,a1,22,0,NA,NA
+1125244,A5,Knowledge_Research,2017,2010,paper1,Q13,Helena,2017_2010_paper1,18,A5,18,33,NA,NA,NA,NA,NA
+2847468,B2,NA,2017,2010,paper1,Q13,Helena,2017_2010_paper1,16,B2,16,34,b2,16,0,NA,NA
+2238475,C3,Academic_Communication,2017,2010,paper1,Q13,Helena,2017_2010_paper1,12,C3,12,35,c3,12,0,NA,NA
+2226354,C3,Academic_Communication,2017,2010,paper1,Q13,Helena,2017_2010_paper1,12,C3,12,36,NA,NA,NA,NA,NA
+1228228,D2,Academic_Communication,2017,2010,paper1,Q13,Helena,2017_2010_paper1,10,D2,10,37,d2,10,0,NA,NA

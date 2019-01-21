@@ -4,7 +4,8 @@
 \alias{check_second_marking}
 \title{Create Second Marking Table}
 \usage{
-check_second_marking(marking, filename = "second_marking", report = FALSE)
+check_second_marking(marking, filename = "second_marking",
+  report = FALSE)
 }
 \arguments{
 \item{marking}{list containing a dataframe (marks) and moodle participant directory (dir)}

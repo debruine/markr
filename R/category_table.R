@@ -23,16 +23,13 @@ category_table <- function(ind_fb, eval, cats) {
     dplyr::slice(1) %>%
     dplyr::select(eval$q) %>%
     tidyr::gather("q", "grade", eval$q) %>%
-    dplyr::mutate(grade = cats[grade]) %>%
+    dplyr::mutate(grade = cats[paste0(grade, "")]) %>%
     dplyr::add_row(q = cats, grade = cats) %>%
     dplyr::mutate(x = "*") %>%
     tidyr::spread(grade, x) %>%
     dplyr::filter(!(q %in% cats)) %>%
     dplyr::mutate_all(dplyr::funs(replace(., is.na(.), ""))) %>%
     dplyr::left_join(eval, by = "q") %>%
-    dplyr::select(Category, cats) %>%
-    pander::pandoc.table(
-      justify = c("left", rep("center", length(cats))),
-      split.cells = c((60-(5*length(cats))), rep(5, length(cats)))
-    )
+    dplyr::select(Category, 2:(length(cats)+1)) %>%
+    knitr::kable(align = c("l", rep("c", length(cats))))
 }

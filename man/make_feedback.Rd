@@ -5,7 +5,7 @@
 \title{Create Feedback Reports}
 \usage{
 make_feedback(marking, template, filename = "feedback.pdf",
-  moodle_dir = FALSE, quiet = TRUE)
+  moodle_dir = FALSE, quiet = TRUE, filetype = "pdf")
 }
 \arguments{
 \item{marking}{list containing a dataframe (marks) and moodle participant directory (dir)}
@@ -17,6 +17,8 @@ make_feedback(marking, template, filename = "feedback.pdf",
 \item{moodle_dir}{give the directory a moodle-style name (defaults FALSE)}
 
 \item{quiet}{passed to rmarkdown::render (default TRUE)}
+
+\item{filetype}{output a pdf or html file (defaults to pdf)}
 }
 \value{
 none

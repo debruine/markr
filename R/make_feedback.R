@@ -9,6 +9,7 @@
 #' @param filename the name to give the rendered file (defaults to feedback.pdf)
 #' @param moodle_dir give the directory a moodle-style name (defaults FALSE)
 #' @param quiet passed to rmarkdown::render (default TRUE)
+#' @param filetype output a pdf or html file (defaults to pdf)
 #' 
 #' @return none
 #' @examples
@@ -19,7 +20,8 @@ make_feedback <- function(marking,
                           template, # the template file for feedback
                           filename = "feedback.pdf",
                           moodle_dir = FALSE,
-                          quiet = TRUE) {
+                          quiet = TRUE,
+                          filetype = "pdf") {
   stopifnot(file.exists(template))
   
   # set feedback directory or create it if none exists

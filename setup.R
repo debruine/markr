@@ -1,5 +1,5 @@
 # edit package
-setwd("~/markr")
+setwd("~/rproj/markr")
 #devtools::use_data(marking_example, overwrite = TRUE)
 devtools::document()
 devtools::load_all()
@@ -7,7 +7,7 @@ devtools::check()
 
 
 # to build the package for installation
-setwd("~/")
+setwd("~/rproj/")
 devtools::install("markr")
 
 
