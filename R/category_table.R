@@ -30,6 +30,6 @@ category_table <- function(ind_fb, eval, cats) {
     dplyr::filter(!(q %in% cats)) %>%
     dplyr::mutate_all(dplyr::funs(replace(., is.na(.), ""))) %>%
     dplyr::left_join(eval, by = "q") %>%
-    dplyr::select(Category, 2:(length(cats)+1)) %>%
+    dplyr::select(Category, unname(cats)) %>%
     knitr::kable(align = c("l", rep("c", length(cats))))
 }
