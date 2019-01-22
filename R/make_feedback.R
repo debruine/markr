@@ -7,7 +7,7 @@
 #' @param marking list containing a dataframe (marks) and moodle participant directory (dir)
 #' @param template path to the .Rmd template file for feedback
 #' @param filename the name to give the rendered file (defaults to feedback.pdf)
-#' @param moodle_dir give the directory a moodle-style name (defaults FALSE)
+#' @param moodle_dir give the directory a moodle-style name, use the pattern 'Participant_*_assignsubmission_onlinetext_' where \* is replaced by the moodle ID (defaults FALSE)
 #' @param quiet passed to rmarkdown::render (default TRUE)
 #' @param filetype output a pdf or html file (defaults to pdf)
 #' 
@@ -40,8 +40,9 @@ make_feedback <- function(marking,
       pdir <- all_dirs[pdir_n]
     } else if (length(pdir_n) == 0) {
       # create a dir that is the id
-      if (moodle_dir) {
-        pdir <- paste0(fb_dir, '/Participant_', myid, '_assignsubmission_file_')
+      if (moodle_dir != FALSE) {
+        moodle_dir_ind <- gsub("*", myid, moodle_dir, fixed = TRUE)
+        pdir <- paste0(fb_dir, '/', moodle_dir_ind)
       } else {
         pdir <- paste0(fb_dir, "/", myid)
       }

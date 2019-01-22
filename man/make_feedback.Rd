@@ -14,7 +14,7 @@ make_feedback(marking, template, filename = "feedback.pdf",
 
 \item{filename}{the name to give the rendered file (defaults to feedback.pdf)}
 
-\item{moodle_dir}{give the directory a moodle-style name (defaults FALSE)}
+\item{moodle_dir}{give the directory a moodle-style name, use the pattern 'Participant_*_assignsubmission_onlinetext_' where \* is replaced by the moodle ID (defaults FALSE)}
 
 \item{quiet}{passed to rmarkdown::render (default TRUE)}
 
