@@ -49,8 +49,10 @@ load_marks <- function(markfile = "marks.csv",
         if (grepl("\\.xls(x)?$", f)) {
           subm <- readxl::read_excel(filepath)
         } else if (grepl("\\.csv$", f)) {
-          subm <- readr::read_csv(filepath,
-                                  col_types = cols("Student ID" = col_character())
+          subm <- readr::read_csv(
+            filepath,
+            col_types = readr::cols("Student ID" = col_character()
+          )
                                   )
         } else if (grepl("\\.txt$", f)) {
           subm <- readr::read_tsv(filepath)

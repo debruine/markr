@@ -31,8 +31,8 @@ all_feedback <- function(markfile,
   # double up line breaks to make paragraphs
   
   m$marks <- m$marks %>%
-    filter(!(Grade %in% c("MV", "CR", "CW") )) %>%
-    mutate(`Generic Feedback` = gsub("\n", "\n\n", `Generic Feedback`),
+    dplyr::filter(!(Grade %in% c("MV", "CR", "CW") )) %>%
+    dplyr::mutate(`Generic Feedback` = gsub("\n", "\n\n", `Generic Feedback`),
            question = paste0("Q", Question),
            id = `Student ID`)
   
@@ -41,7 +41,7 @@ all_feedback <- function(markfile,
   # check for missing feedback
   # contact course leads if not 0
   missing_feedback <- m$marks %>% 
-    filter(is.na(`Individual Feedback 1`) | 
+    dplyr::filter(is.na(`Individual Feedback 1`) | 
              is.na(`Individual Feedback 2`) | 
              is.na(`Individual Feedback 3`) | 
              is.na(`Generic Feedback`) |
@@ -49,14 +49,14 @@ all_feedback <- function(markfile,
   
   # check for missing moodle IDs
   # contact Helena Patterson if not 0
-  no_moodle <- m$marks %>% filter(is.na(moodle_id))
-  
+  no_moodle <- m$marks %>% dplyr::filter(is.na(moodle_id))
+
   # check for duplicate marks for same student:class:Q
   # contact Mac Becirsphic if not 0
   dupe_marks <- m$marks %>% 
-    group_by(`Student ID`, class_id, Question) %>%
-    summarise(n = n()) %>%
-    filter(n > 1)
+    dplyr::group_by(`Student ID`, class_id, Question) %>%
+    dplyr::summarise(n = n()) %>%
+    dplyr::filter(n > 1)
   
   if (nrow(missing_feedback) > 0) {
     warning("Missing Feedback: contact course lead")
@@ -73,27 +73,27 @@ all_feedback <- function(markfile,
   
   # make an overview plot
   m$marks %>%
-    ggplot() +
-    geom_histogram(aes(mark, fill = question),
+    ggplot2::ggplot() +
+    ggplot2::geom_histogram(aes(mark, fill = question),
                    color = "white",
                    binwidth = 1) +
-    xlim(-0.5, 22.5) +
-    facet_wrap(~class_id, scales="free_y") +
-    scale_fill_viridis_d() +
-    theme_minimal()
+    ggplot2::xlim(-0.5, 22.5) +
+    ggplot2::facet_wrap(~class_id, scales="free_y") +
+    ggplot2::scale_fill_viridis_d() +
+    ggplot2::theme_minimal()
   
   if (!dir.exists("figures")) dir.create("figures")
-  ggsave("figures/all_marks.png", width = 10, height = 10)
+  ggplot2::ggsave("figures/all_marks.png", width = 10, height = 10)
   
   # get all classes
   classes <- m$marks %>%
-    pull(class_id) %>%
-    unique()
+    dplyr::pull(class_id) %>%
+    dplyr::unique()
   
   for (c_id in classes) {
     m2 <- m
     
-    m2$marks <- m2$marks %>% filter(class_id == c_id)
+    m2$marks <- m2$marks %>% dplyr::filter(class_id == c_id)
     
     if (template_file == FALSE) {
       template_file <- paste0(c_id, "_template.Rmd")
