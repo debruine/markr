@@ -34,8 +34,7 @@ all_feedback <- function(markfile,
     dplyr::filter(!(Grade %in% c("MV", "CR", "CW") )) %>%
     dplyr::mutate(`Generic Feedback` = gsub("\n", "\n\n", `Generic Feedback`),
            question = paste0("Q", Question),
-           id = `Student ID`,
-           class_id = assign_id)
+           id = `Student ID`)
   
   #View(m$marks)
   
