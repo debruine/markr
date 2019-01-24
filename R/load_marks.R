@@ -51,7 +51,7 @@ load_marks <- function(markfile = "marks.csv",
         } else if (grepl("\\.csv$", f)) {
           subm <- readr::read_csv(
             filepath,
-            col_types = readr::cols("Student ID" = col_character()
+            col_types = readr::cols("Student ID" = readr::col_character()
           )
                                   )
         } else if (grepl("\\.txt$", f)) {
@@ -77,7 +77,7 @@ load_marks <- function(markfile = "marks.csv",
           extra = "merge",
           fill = "right"
         ) %>%
-        select(-junk1, -junk2, -junk3) %>%
+        dplyr::select(-junk1, -junk2, -junk3) %>%
         dplyr::mutate(marker = gsub("-", " ", Marker))
       
       if (nrow(m) == 0) {

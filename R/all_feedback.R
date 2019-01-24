@@ -34,7 +34,8 @@ all_feedback <- function(markfile,
     dplyr::filter(!(Grade %in% c("MV", "CR", "CW") )) %>%
     dplyr::mutate(`Generic Feedback` = gsub("\n", "\n\n", `Generic Feedback`),
            question = paste0("Q", Question),
-           id = `Student ID`)
+           id = `Student ID`,
+           class_id = assign_id)
   
   #View(m$marks)
   
@@ -52,7 +53,7 @@ all_feedback <- function(markfile,
   no_moodle <- m$marks %>% dplyr::filter(is.na(moodle_id))
 
   # check for duplicate marks for same student:class:Q
-  # contact Mac Becirsphic if not 0
+  # contact Marc Becirsphic if not 0
   dupe_marks <- m$marks %>% 
     dplyr::group_by(`Student ID`, class_id, Question) %>%
     dplyr::summarise(n = n()) %>%
@@ -74,7 +75,7 @@ all_feedback <- function(markfile,
   # make an overview plot
   m$marks %>%
     ggplot2::ggplot() +
-    ggplot2::geom_histogram(aes(mark, fill = question),
+    ggplot2::geom_histogram(ggplot2::aes(mark, fill = question),
                    color = "white",
                    binwidth = 1) +
     ggplot2::xlim(-0.5, 22.5) +
@@ -88,7 +89,7 @@ all_feedback <- function(markfile,
   # get all classes
   classes <- m$marks %>%
     dplyr::pull(class_id) %>%
-    dplyr::unique()
+    unique()
   
   for (c_id in classes) {
     m2 <- m
